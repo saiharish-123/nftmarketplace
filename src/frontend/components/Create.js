@@ -38,6 +38,7 @@ const Create = ({ marketplace, nft }) => {
     } catch (error) {
       setimgloading(false)
       console.log(error)
+      alert("Somthing went wrong")
     }
   }
   const createNFT = async () => {
@@ -57,6 +58,8 @@ const Create = ({ marketplace, nft }) => {
       // console.log(url)
     } catch (error) {
       console.log(error.response.data)
+      setSloading(false)
+      alert("Somthing went wrong")
     }
     // try{
     //   const result = await client.add(JSON.stringify({image, price, name, description}))
