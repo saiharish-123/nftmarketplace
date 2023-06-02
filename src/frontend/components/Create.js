@@ -36,6 +36,7 @@ const Create = ({ marketplace, nft }) => {
       setimgloading(false)
       setImage(url)
     } catch (error) {
+      setimgloading(false)
       console.log(error)
     }
   }
