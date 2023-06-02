@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { ethers } from "ethers"
-import { Row, Form, Button, Card } from 'react-bootstrap'
+import { Row, Form, Button, Card, ProgressBar } from 'react-bootstrap'
 import { create } from 'ipfs-http-client'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 const client = create('https://ipfs.infura.io:5001/api/v0')
 const pinataBaseUrl = 'https://api.pinata.cloud'
 const PINATA_API_KEY = '3c47b95b69dbfbcf25bc'
@@ -13,6 +14,9 @@ const Create = ({ marketplace, nft }) => {
   const [price, setPrice] = useState(null)
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
+  const [imageLoading,setimgloading] = useState(false)
+  const [SbmitLoading,setSloading] = useState(false)
+  const navigate = useNavigate();
   const uploadToIPFS = async (event) => {
     event.preventDefault()
     const file = event.target.files[0]
@@ -29,6 +33,7 @@ const Create = ({ marketplace, nft }) => {
       console.log(responseData)
       const url = `https://ipfs.io/ipfs/${responseData.IpfsHash}?filename=${file.name}`
       console.log(url)
+      setimgloading(false)
       setImage(url)
     } catch (error) {
       console.log(error)
@@ -71,6 +76,8 @@ const Create = ({ marketplace, nft }) => {
     // add nft to marketplace
     const listingPrice = ethers.utils.parseEther(price.toString())
     await(await marketplace.makeItem(nft.address, id, listingPrice)).wait()
+    setSloading(false)
+    navigate('/')
   }
   return (
     <div className="container-fluid mt-5">
@@ -80,16 +87,24 @@ const Create = ({ marketplace, nft }) => {
             <Row className="g-4">
               <Form.Control
                 type="file"
+                disabled={imageLoading}
                 required
                 name="file"
-                onChange={uploadToIPFS}
+                onChange={e=>{
+                  setimgloading(true)
+                  uploadToIPFS(e)
+                }}
               />
+              {imageLoading ? <ProgressBar animated now={100} /> : ''}
               <Form.Control onChange={(e) => setName(e.target.value)} size="lg" required type="text" placeholder="Name" />
               <Form.Control onChange={(e) => setDescription(e.target.value)} size="lg" required as="textarea" placeholder="Description" />
               <Form.Control onChange={(e) => setPrice(e.target.value)} size="lg" required type="number" placeholder="Price in ETH" />
               <div className="d-grid px-0">
-                <Button onClick={createNFT} variant="primary" size="lg">
-                  Create & List NFT!
+                <Button onClick={e=>{
+                  setSloading(true)
+                  createNFT(e)
+                }} disabled={SbmitLoading} variant="primary" size="lg">
+                  {!SbmitLoading ? "Create & List NFT!" : "Creating NFT....."}
                 </Button>
               </div>
             </Row>
