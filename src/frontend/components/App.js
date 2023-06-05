@@ -31,6 +31,8 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum)
     // Set signer
     const signer = provider.getSigner()
+    // console.log(signer)
+    
 
     window.ethereum.on('chainChanged', (chainId) => {
       window.location.reload();

@@ -68,7 +68,7 @@ contract Marketplace is ReentrancyGuard {
     function purchaseItem(uint _itemId) payable external nonReentrant{
         uint _totalPrice = getTotalPrice(_itemId);
         Item storage item = items[_itemId];
-        require(_itemId>0 && _itemId<=itemCount, "item doesn't exist");
+        require(_itemId>0 && _itemId<=it    emCount, "item doesn't exist");
         require(msg.value >= _totalPrice, "not enough ether to cover item price and market fee");
         require(!item.sold, "item already sold");
 

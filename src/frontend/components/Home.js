@@ -35,6 +35,7 @@ const Home = ({ marketplace, nft }) => {
   }
 
   const buyMarketItem = async (item) => {
+    setLoading(true)
     await (await marketplace.purchaseItem(item.itemId, { value: item.totalPrice })).wait()
     loadMarketplaceItems()
   }
@@ -55,7 +56,9 @@ const Home = ({ marketplace, nft }) => {
             {items.map((item, idx) => (
               <Col key={idx} className="">
                 <Card className='shadowbox'>
+                  <div style={{widh:"250px",height:"250px",display:"flex",justifyContent:'center',alignItems:"center"}}>
                   <Card.Img className='imageCard' variant="top" src={item.image} />
+                  </div>
                   <Card.Body color="secondary">
                     <Card.Title>{item.name}</Card.Title>
                     <Card.Text>

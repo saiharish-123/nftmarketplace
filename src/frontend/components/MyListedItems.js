@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ethers } from "ethers"
 import { Row, Col, Card } from 'react-bootstrap'
 
 function renderSoldItems(items) {
   return (
-    <>
+    <React.Fragment>
       <h2>Sold</h2>
       <Row xs={1} md={2} lg={4} className="g-4 py-3">
         {items.map((item, idx) => (
@@ -18,7 +18,7 @@ function renderSoldItems(items) {
           </Col>
         ))}
       </Row>
-    </>
+    </React.Fragment>
   )
 }
 
