@@ -24,6 +24,7 @@ function App() {
   const [nft, setNFT] = useState({})
   const [marketplace, setMarketplace] = useState({})
   // MetaMask Login/Connect
+  const targetNetworkId = '0xaa36a7'
   const web3Handler = async () => {
     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
     setAccount(accounts[0])
@@ -33,6 +34,17 @@ function App() {
     const signer = provider.getSigner()
     // console.log(signer)
     
+    const currentChainId = await window.ethereum.request({
+      method: 'eth_chainId',
+    });
+    // console.log(currentChainId)
+
+    if (currentChainId !== targetNetworkId){
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: targetNetworkId }],
+      });
+    };
 
     window.ethereum.on('chainChanged', (chainId) => {
       window.location.reload();
